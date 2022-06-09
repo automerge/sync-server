@@ -1,12 +1,30 @@
 <!DOCTYPE html>
+<script src="cbor-x.js"></script>
+<script src="automerge.min.js"></script>
 <script>
 let socket = new WebSocket(`ws://${window.location.host}/sync`);
+let doc = Automerge.change(Automerge.init(), doc => doc.hello = 'world')
+let syncState = Automerge.initSyncState()
+
+function sendMessage(message) {
+  const newmsg = CBOR.encode({ documentId: 'TODO', message })
+  console.log('sending message', newmsg)
+  socket.send(newmsg)
+}
+
 socket.onopen = function (event) {
-  socket.send("Message from browser");
+  let message
+  ;[syncState, message] = Automerge.generateSyncMessage(doc, syncState)
+  sendMessage(message)
 };
+
 socket.onmessage = function (event) {
   event.data.arrayBuffer().then(data => {
-    console.log('Received message:', new Uint8Array(data));
+    let { documentId, message } = CBOR.decode(new Uint8Array(data))
+    console.log('Received message:', message);
+    ;[doc, syncState] = Automerge.receiveSyncMessage(doc, syncState, message)
+    ;[syncState, message] = Automerge.generateSyncMessage(doc, syncState)
+    if (message) sendMessage(message)
   })
 }
 </script>

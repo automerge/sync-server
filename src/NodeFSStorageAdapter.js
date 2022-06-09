@@ -9,13 +9,15 @@ function NodeFSStorageAdapter() {
     load: (docId) => {
       return new Promise((resolve, reject) => {
         fs.readFile(fileName(docId), (err, data) => {
-          if (err) reject(err); else resolve(data)
+          if (err) resolve(null); else resolve(data)
         });
       });
     },
 
     save: (docId, binary) => {
       fs.writeFile(fileName(docId), binary, err => {
+        // TODO: race condition if a load happens before the save is complete.
+        // use an in-memory cache while save is in progress
         if (err) throw err;
       });
     },

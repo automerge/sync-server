@@ -33,7 +33,7 @@ class NodeWSServerAdapter extends EventEmitter {
       this.#announceConnection(documentId, userName, socket)
 
       // When a socket closes, or disconnects, remove it from the array.
-      socket.on('close', function() {
+      socket.on('close', () => {
         console.log('Disconnected')
         this.openSockets = this.openSockets.filter(s => s !== socket)
       })
@@ -46,13 +46,11 @@ class NodeWSServerAdapter extends EventEmitter {
   }
 
   join(docId) {
-    // TODO
-    //this.client.join(docId)
+    for (let socket of this.openSockets); // TODO
   }
 
   leave(docId) {
-    // TODO
-    //this.client.leave(docId)
+    for (let socket of this.openSockets); // TODO
   }
 }
 
