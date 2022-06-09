@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<script>
+let socket = new WebSocket(`ws://${window.location.host}/sync`);
+socket.onopen = function (event) {
+  socket.send("Message from browser");
+};
+socket.onmessage = function (event) {
+  event.data.arrayBuffer().then(data => {
+    console.log('Received message:', new Uint8Array(data));
+  })
+}
+</script>
