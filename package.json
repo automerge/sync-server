@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "type": "module",
   "dependencies": {
     "automerge-repo": "../automerge-repo-poc",
     "express": "^4.18.1",

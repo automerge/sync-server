@@ -1,9 +1,20 @@
-const express = require('express');
-const ws = require('ws');
+import express from 'express'
+import { WebSocketServer } from 'ws'
 
 const PORT = 3000;
-const wsServer = new ws.Server({ noServer: true });
+let sockets = [];
+
+const wsServer = new WebSocketServer({ noServer: true });
 wsServer.on('connection', socket => {
+  console.log('New WebSocket connection');
+  sockets.push(socket);
+
+  // When a socket closes, or disconnects, remove it from the array.
+  socket.on('close', function() {
+    console.log('Disconnected');
+    sockets = sockets.filter(s => s !== socket);
+  });
+
   socket.on('message', message => {
     console.log('Received message: ', message)
     socket.send(message);
