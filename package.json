@@ -5,6 +5,7 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
+    "automerge": "^1.0.1-preview.7",
     "automerge-repo": "../automerge-repo-poc",
     "express": "^4.18.1",
     "ws": "^8.7.0"
